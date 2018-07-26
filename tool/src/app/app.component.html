@@ -1,0 +1,108 @@
+<!--The content below is only a placeholder and can be replaced.-->
+<div class="col s12 ">
+  <h2 class="center-align">Herramienta de cálculo de camino crítico</h2>
+  <mat-tab-group (selectedTabChange)="tabSelectionChanged($event)">
+    <mat-tab label="Matriz de operaciones"  >
+      <div class="col s10" style="height:100vh; position: relative !important; left: 5%; width: 90%; top: 20px;">
+          <h5>Por favor ingrese los siguientes valores</h5>
+          <div class="row">
+             <div class="col s3">
+                 <div class="input-field">
+                     <input [(ngModel)]="nombre"  placeholder="" id="last_name" type="text" class="validate">
+                     <label for="last_name">Nombre Operación</label>
+                   </div>
+             </div>
+            <div class="col s3">
+               <div class="input-field">
+                   <input  [(ngModel)]="tiempo"   placeholder="" id="last_name" type="number" min=0 class="validate">
+                   <label for="last_name">Tiempo</label>
+                 </div>
+            </div>
+            <div class="col s3">
+               <mat-form-field style="position: relative; top: 19px;">
+                   <mat-select placeholder="Predecesores" [(ngModel)]="predecesores" [formControl]="toppings"  multiple>
+                     <mat-option *ngFor="let op of opciones" [value]="op">{{op}}</mat-option>
+                   </mat-select>
+                 </mat-form-field>
+             </div>
+            <div [hidden]="editable" class="col s2">
+               <a class="btn green" (click)="anadirOperacion()" style="position: relative; top: 20px;" >Agregar</a>
+            </div>   
+            <div [hidden]="!editable" class="col s3">
+                <div  class="col s6">
+                    <a class="btn red" (click)="editar(-1)" style="position: relative; top: 20px;" >Cancelar</a>
+                 </div>
+                <div  class="col s6">
+                    <a class="btn green" (click)="actualizarOperacion()" style="position: relative; top: 20px;" >Actualizar</a>
+                 </div> 
+            </div>
+                   
+          </div>
+          <table>
+             <thead>
+                 <tr>
+                     <th>Nombre Tarea</th>
+                     <th>Tiempo</th>
+                     <th>Predecesores</th>
+                     <th>ES</th>
+                     <th>EF</th>
+                     <th>LS</th>
+                     <th>LF</th>
+                     <th>Holgura</th>
+                     <th></th>
+                     <th></th>
+                 </tr>
+               </thead>
+         
+               <tbody>
+                 <tr *ngFor="let operacion of operaciones; let i = index" 
+                 [style.background-color]="operacion.critico == 'y' ? '#ffca28' : 'white'">
+                   <td>{{operacion.nombre}}</td>
+                   <td>{{operacion.tiempo}}</td>
+                   <td>{{operacion.predecesores}}</td>
+                   <td>{{operacion.es}}</td>
+                   <td>{{operacion.ef}}</td>
+                   <td>{{operacion.ls}}</td>
+                   <td [hidden]="operacion.lf==0" >{{operacion.lf}}</td>
+                   <td [hidden]="!(operacion.lf==0)" ></td>
+                   <td>{{operacion.holgura}}</td>
+                   <td><a style="cursor: pointer" (click)="editar(i)"><i class="material-icons grey-text">edit</i></a></td>
+                   <td><a class="modal-trigger " (click)="seleccionarEliminar(i)" href="#modal1">
+                      <i class="material-icons red-text">delete</i>
+                   </a></td>
+                 </tr>
+               </tbody>
+               <div class="row">
+                  <div class="col s3">
+                      <a class="btn" (click)="calcular()" style="position: relative; top: 20px;" >Calcular</a>
+                   </div>
+                   <div [hidden]="!exportable" class="col s6">
+                      <a class="btn" (click)="generarReporte()" style="position: relative; top: 20px;" >Exportar .csv</a>
+                   </div>
+               </div> 
+          </table>
+
+         
+          
+      </div>
+    </mat-tab>
+    <mat-tab  label="Grafo de operaciones">
+      <h3 class="center-align">Grafo de nodos</h3>
+      <div id="mynetwork" ></div>
+    </mat-tab>
+  </mat-tab-group>
+ </div>
+
+ <div id="modal1" class="modal">
+    <div class="modal-content">
+      <h4>¿Está seguro de que desea eliminar?</h4>
+      <p>Tenga en cuenta que si elimina una operación se eliminarán también todos sus sucesores</p>
+    </div>
+    <div class="modal-footer">
+        <a  class="modable modal-close waves-effect waves-green btn-flat">Cancelar</a>
+      <a  (click)="eliminar()" class=" modable modal-close waves-effect waves-green btn-flat">Eliminar</a>
+    </div>
+</div>
+ 
+ 
+ 

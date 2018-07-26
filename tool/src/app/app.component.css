@@ -1,0 +1,11 @@
+#mynetwork {
+    width: 100%;
+    max-width: 1000px;
+    height: 400px;
+    border: 1px solid lightgray;
+    margin: auto;
+  }
+
+.modable:hover{
+    background-color: #F44336 !important;
+}
